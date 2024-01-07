@@ -1,5 +1,6 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import dotenv from 'dotenv';
 
 const envFile = path.resolve(process.cwd(), `.env.${process.env.NODE_ENV || ''}`);
 
@@ -7,8 +8,9 @@ if (!fs.existsSync(envFile)) {
 	throw new Error(`${envFile} is not found`);
 }
 
-require('dotenv').config({
+dotenv.config({
 	path: envFile,
+	override: process.env.NODE_ENV === 'test'
 });
 
 

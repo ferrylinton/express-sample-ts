@@ -6,6 +6,8 @@ const mongoClientOptions: MongoClientOptions = {
     authMechanism: "DEFAULT",
     authSource: MONGODB_AUTH_SOURCE,
     monitorCommands: true,
+    connectTimeoutMS: 15000,
+    socketTimeoutMS: 15000,
     auth: {
         username: MONGODB_USERNAME,
         password: MONGODB_PASSWORD
@@ -24,36 +26,31 @@ export const transactionOptions: TransactionOptions = {
 let mongoClient: Promise<MongoClient>;
 
 const getMongoClientInstance = () => {
+    try {
+        /**
+         * @constant {string} mongodbURL
+         */
+        const mongodbURL = `mongodb://${MONGODB_HOST}:${MONGODB_PORT}`;
+        const instance = new MongoClient(mongodbURL, mongoClientOptions);
 
-    /**
-	 * @constant {string} mongodbURL
-	 */
-	const mongodbURL = `mongodb://${MONGODB_HOST}:${MONGODB_PORT}`;
+        instance.on('connectionPoolCreated', (event) => console.log(`[MONGODB] ${JSON.stringify(event)}`));
+        instance.on('connectionPoolReady', (event) => console.log(`[MONGODB] ${JSON.stringify(event)}`));
+        instance.on('connectionCreated', (event) => console.log(`[MONGODB] ${JSON.stringify(event)}`));
+        instance.on('connectionClosed', (event) => console.log(`[MONGODB] ${JSON.stringify(event)}`));
 
-    const instance = new MongoClient(mongodbURL, mongoClientOptions);
-
-    instance.on('connectionPoolCreated', (event) => console.log(`[MONGODB] ${JSON.stringify(event)}`));
-    
-    instance.on('connectionPoolReady', (event) => console.log(`[MONGODB] ${JSON.stringify(event)}`));
-    
-    instance.on('connectionCreated', (event) => console.log(`[MONGODB] ${JSON.stringify(event)}`));
-    
-    instance.on('connectionClosed', (event) => console.log(`[MONGODB] ${JSON.stringify(event)}`));
-
-    return instance;
+        return instance;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
 export const getMongoClient = async () => {
-    if(mongoClient){
+    if (mongoClient) {
         return mongoClient;
-    }else{
-        try {
-			mongoClient = getMongoClientInstance().connect();
-		} catch (error) {
-			console.log(error);
-		}
-
-		return mongoClient;
+    } else {
+        mongoClient = getMongoClientInstance().connect();
+        return mongoClient;
     }
 };
 

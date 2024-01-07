@@ -1,4 +1,4 @@
-const app = require('./app');
+import app from './app';
 
 /**
  * @constant {number} express application running on this port number

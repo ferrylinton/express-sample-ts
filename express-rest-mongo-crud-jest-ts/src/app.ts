@@ -23,14 +23,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/todoes', todoRouter);
 
 // 404 / not found handler
-app.use((req: Request, res: Response, next: NextFunction) => {
+app.use((_req: Request, res: Response, next: NextFunction) => {
     res.status(404).json({ message: "Not Found" })
 })
 
 // error handler
-app.use((err: Error, _req: Request, res: Response) => {
-    console.error(err.stack)
-    res.status(500).json({ message: err.message })
+app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+    res.status(err.status || 500);
+    return res.json({ message: err.message || 'Internal Server Error' })
 })
 
-module.exports = app;
+export default app;
