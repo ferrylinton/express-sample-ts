@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 
-const envFile = path.resolve(process.cwd(), `.env.${process.env.NODE_ENV || ''}`);
+const envFile = path.resolve(process.cwd(), `.env.${process.env.NODE_ENV || 'development'}`);
 
 if (!fs.existsSync(envFile)) {
 	throw new Error(`${envFile} is not found`);
