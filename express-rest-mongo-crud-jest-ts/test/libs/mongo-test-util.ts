@@ -1,6 +1,6 @@
 import { MONGODB_AUTH_SOURCE, MONGODB_DATABASE, MONGODB_PASSWORD, MONGODB_PORT, MONGODB_USERNAME } from '../../src/configs/env-constant';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { getMongoClient } from '../../src/configs/mongodb';
+import { getMongoClient } from '@/configs/mongodb';
 
 
 // Create an Mongo-Memory-Sever Instance

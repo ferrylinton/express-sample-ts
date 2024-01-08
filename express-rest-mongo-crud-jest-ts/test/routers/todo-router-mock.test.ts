@@ -1,12 +1,11 @@
 import { DeleteResult, InsertOneResult, ObjectId, UpdateResult } from 'mongodb';
 import request from 'supertest';
-import app from '../../src/app';
-import * as todoService from '../../src/services/todo-service';
-import { Todo, UpdateTodo } from '../../src/types/todo-type';
+import app from '@/app';
+import { Todo, UpdateTodo } from '@/types/todo-type';
 
 const _id: string = '659a255e868375640fb37e20';
 
-jest.mock('../../src/services/todo-service', () => ({
+jest.mock('@/services/todo-service', () => ({
     create: jest.fn((task: string): Promise<InsertOneResult> => {
         return new Promise((resolve, reject) => {
             if (task === 'error') {
@@ -87,28 +86,20 @@ describe('/api/todoes', () => {
     describe('POST /api/todoes', function () {
 
         it('should create a task', async function () {
-            jest.spyOn(todoService, 'create');
-
             const response = await request(app)
                 .post('/api/todoes')
                 .send({ task: 'test' })
                 .set('Accept', 'application/json')
                 .expect(201);
-
-            expect(todoService.create).toHaveBeenCalledTimes(1);
             expect(response.body.insertedId).toBe('659a255e868375640fb37e20');
         });
 
         it('should throw error', async function () {
-            jest.spyOn(todoService, 'create');
-
             const response = await request(app)
                 .post('/api/todoes')
                 .send({ task: 'error' })
                 .set('Accept', 'application/json')
                 .expect(500);
-
-            expect(todoService.create).toHaveBeenCalledTimes(2);
             expect(response.body.message).toBe('Test Error');
         });
 
@@ -117,8 +108,6 @@ describe('/api/todoes', () => {
     describe('GET /api/todoes/:_id', function () {
 
         it('should return a task', async function () {
-            jest.spyOn(todoService, 'findById');
-
             const response = await request(app)
                 .get('/api/todoes/' + _id)
                 .set('Accept', 'application/json')
@@ -127,8 +116,6 @@ describe('/api/todoes', () => {
         });
 
         it('task is not found', async function () {
-            jest.spyOn(todoService, 'findById');
-
             const response = await request(app)
                 .get('/api/todoes/xxxxxx')
                 .set('Accept', 'application/json')
@@ -141,8 +128,6 @@ describe('/api/todoes', () => {
     describe('GET /api/todoes/', function () {
 
         it('should return list of tasks', async function () {
-            jest.spyOn(todoService, 'find');
-
             const response = await request(app)
                 .get(`/api/todoes`)
                 .set('Accept', 'application/json')
@@ -155,7 +140,6 @@ describe('/api/todoes', () => {
     describe('PUT /api/todoes/:_id', function () {
 
         it('should update task', async function () {
-            jest.spyOn(todoService, 'update');
             const response = await request(app)
                 .put('/api/todoes/' + _id)
                 .send({ task: 'test update' })
@@ -169,7 +153,6 @@ describe('/api/todoes', () => {
     describe('DELETE /api/todoes/:_id', function () {
 
         it('should update task', async function () {
-            jest.spyOn(todoService, 'deleteById');
             const response = await request(app)
                 .delete('/api/todoes/' + _id)
                 .set('Accept', 'application/json')

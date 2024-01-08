@@ -1,7 +1,7 @@
 import assert from 'assert';
 import request from 'supertest';
-import app from '../../src/app';
-import { startMongoServer, stopMongoServer } from '../libs/mongo-test-util';
+import app from '@/app';
+import { startMongoServer, stopMongoServer } from '@/libs/mongo-test-util';
 
 beforeAll(async () => {
     await startMongoServer();

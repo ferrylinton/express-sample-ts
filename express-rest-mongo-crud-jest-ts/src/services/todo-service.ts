@@ -1,7 +1,7 @@
-import { Todo, UpdateTodo } from "../types/todo-type";
+import { Todo, UpdateTodo } from "@/types/todo-type";
 
 import { ObjectId } from 'mongodb';
-import { getCollection } from '../configs/mongodb';
+import { getCollection } from '@/configs/mongodb';
 
 /**
  * A service that handles CRUD operations of Todo's data

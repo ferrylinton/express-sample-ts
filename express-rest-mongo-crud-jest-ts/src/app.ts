@@ -1,7 +1,7 @@
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
-import todoRouter from './routers/todo-router';
+import todoRouter from '@/routers/todo-router';
 import { NextFunction, Request, Response } from 'express';
 
 /**

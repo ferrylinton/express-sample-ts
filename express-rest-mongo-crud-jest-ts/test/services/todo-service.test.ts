@@ -1,6 +1,6 @@
 import { equal, strictEqual } from 'assert';
-import { create, deleteById, find, findById, update } from '../../src/services/todo-service';
-import { startMongoServer, stopMongoServer } from '../libs/mongo-test-util';
+import { create, deleteById, find, findById, update } from '@/services/todo-service';
+import { startMongoServer, stopMongoServer } from '@/libs/mongo-test-util';
 
 beforeAll(async () => {
 	await startMongoServer();

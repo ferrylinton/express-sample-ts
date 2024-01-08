@@ -1,5 +1,5 @@
 import { Db, Document, MongoClient, MongoClientOptions, TransactionOptions } from 'mongodb';
-import { MONGODB_AUTH_SOURCE, MONGODB_DATABASE, MONGODB_PASSWORD, MONGODB_HOST, MONGODB_PORT, MONGODB_USERNAME } from './env-constant';
+import { MONGODB_AUTH_SOURCE, MONGODB_DATABASE, MONGODB_PASSWORD, MONGODB_HOST, MONGODB_PORT, MONGODB_USERNAME } from '@/configs/env-constant';
 
 
 const mongoClientOptions: MongoClientOptions = {
