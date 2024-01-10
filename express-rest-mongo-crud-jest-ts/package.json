@@ -9,7 +9,7 @@
     "start": "cross-env NODE_ENV=production node ./dist/server.js",
     "dev": "cross-env NODE_ENV=development tsx watch ./src/server.ts",
     "test": "cross-env NODE_ENV=test jest --runInBand --detectOpenHandles --forceExit",
-    "coverage": "cross-env NODE_ENV=test jest --coverage --runInBand --detectOpenHandles --forceExit"
+    "coverage": "cross-env NODE_ENV=test jest --coverage --runInBand --detectOpenHandles --forceExit --no-cache "
   },
   "keywords": [
     "typescript",

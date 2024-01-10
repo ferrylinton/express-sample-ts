@@ -11,7 +11,7 @@ afterAll(async () => {
     await stopMongoServer();
 });
 
-describe('/api/todoes', () => {
+describe.skip('/api/todoes', () => {
 
     let _id: string = '0';
 

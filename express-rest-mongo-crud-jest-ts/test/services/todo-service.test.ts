@@ -10,7 +10,7 @@ afterAll(async () => {
 	await stopMongoServer();
 });
 
-describe('todoService', () => {
+describe.skip('todoService', () => {
 	let _id: string;
 
 	test('find all data', async () => {

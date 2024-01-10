@@ -9,7 +9,7 @@ jest.mock('@/services/todo-service', () => ({
     create: jest.fn((task: string): Promise<InsertOneResult> => {
         return new Promise((resolve, reject) => {
             if (task === 'error') {
-                reject(new Error('Test Error'));
+                reject(new Error('Error'));
             } else {
                 resolve({
                     acknowledged: true,
@@ -29,6 +29,8 @@ jest.mock('@/services/todo-service', () => ({
                     createdAt: new Date(),
                     updatedAt: null
                 })
+            } if (_id === 'xxx') {
+                reject(new Error('Error'));
             } else {
                 resolve(null);
             }
@@ -47,7 +49,12 @@ jest.mock('@/services/todo-service', () => ({
 
             resolve(todoes);
         });
-    }),
+    })
+        .mockImplementationOnce(() => {
+            return new Promise((resolve, reject) => {
+                reject(new Error('Error'))
+            });
+        }),
 
     update: jest.fn((_id: string, _updateTodo: UpdateTodo): Promise<UpdateResult<Todo>> => {
         return new Promise((resolve, reject) => {
@@ -85,7 +92,7 @@ describe('/api/todoes', () => {
 
     describe('POST /api/todoes', function () {
 
-        it('should create a task', async function () {
+        test('should create a task', async function () {
             const response = await request(app)
                 .post('/api/todoes')
                 .send({ task: 'test' })
@@ -94,20 +101,20 @@ describe('/api/todoes', () => {
             expect(response.body.insertedId).toBe('659a255e868375640fb37e20');
         });
 
-        it('should throw error', async function () {
+        test('should throw error', async function () {
             const response = await request(app)
                 .post('/api/todoes')
                 .send({ task: 'error' })
                 .set('Accept', 'application/json')
                 .expect(500);
-            expect(response.body.message).toBe('Test Error');
+            expect(response.body.message).toBe('Error');
         });
 
     });
 
     describe('GET /api/todoes/:_id', function () {
 
-        it('should return a task', async function () {
+        test('should return a task', async function () {
             const response = await request(app)
                 .get('/api/todoes/' + _id)
                 .set('Accept', 'application/json')
@@ -115,19 +122,35 @@ describe('/api/todoes', () => {
             expect(response.body._id).toBe(_id);
         });
 
-        it('task is not found', async function () {
+        test('task is not found', async function () {
             const response = await request(app)
-                .get('/api/todoes/xxxxxx')
+                .get('/api/todoes/notfound')
                 .set('Accept', 'application/json')
                 .expect(404);
             expect(response.body.message).toBe('Data is not found');
         });
 
+        test('findById should throw error', async function () {
+            const response = await request(app)
+                .get('/api/todoes/xxx')
+                .set('Accept', 'application/json')
+                .expect(500);
+            expect(response.body.message).toBe('Error');
+        });
+
     });
 
-    describe('GET /api/todoes/', function () {
+    describe('GET /api/todoes', function () {
 
-        it('should return list of tasks', async function () {
+        test('getTodoes() should throw error', async function () {
+            const response = await request(app)
+                .get(`/api/todoes`)
+                .set('Accept', 'application/json')
+                .expect(500);
+            expect(response.body.message).toBe('Error');
+        });
+
+        test('getTodoes() should return list of tasks', async function () {
             const response = await request(app)
                 .get(`/api/todoes`)
                 .set('Accept', 'application/json')
@@ -139,7 +162,7 @@ describe('/api/todoes', () => {
 
     describe('PUT /api/todoes/:_id', function () {
 
-        it('should update task', async function () {
+        test('should update task', async function () {
             const response = await request(app)
                 .put('/api/todoes/' + _id)
                 .send({ task: 'test update' })
@@ -152,7 +175,7 @@ describe('/api/todoes', () => {
 
     describe('DELETE /api/todoes/:_id', function () {
 
-        it('should update task', async function () {
+        test('should update task', async function () {
             const response = await request(app)
                 .delete('/api/todoes/' + _id)
                 .set('Accept', 'application/json')
