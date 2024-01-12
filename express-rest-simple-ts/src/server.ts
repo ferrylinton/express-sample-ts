@@ -1,6 +1,12 @@
 import app from './app';
 
 /**
+ * Start Express Application
+ * @author ferrylinton
+ * @module Server
+ */
+
+/**
  * @constant {number} express application running on this port number
  */
 const PORT = 5001;

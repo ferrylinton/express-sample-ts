@@ -1,8 +1,6 @@
 import assert from 'assert';
 import request from 'supertest';
 import app from '../src/app';
-import { getMessage } from '../src/services/hello-service';
-
 
 describe('app', () => {
 
